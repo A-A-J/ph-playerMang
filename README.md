@@ -1,9 +1,13 @@
-# ph-playerMang
+## ph-playerMang
 سكربت **ph-playerMang** هو إضافة مخصصة لنظام **QBCore** في لعبة **FiveM**، يهدف إلى إدارة خدمات اللاعبين من خلال إيقاف أو استئناف خدماتهم بناءً على شروط معينة. يوفر السكربت واجهة سهلة الاستخدام لإدارة العقوبات المتعلقة بالخدمات في اي سكربت آخر..
 
 ---
 
 ## طريق الاستخدام
+### لإضافة السكربت في qb-management
+استخدم حدث ` ph-playerMang:client:openMenu ` على حسب الوظائف المهمة مثل: الشرطة، المحكمة
+
+
 ### لتحقق من ايقاف اللاعب لاي سكربت مثل البنك بسكربت آخر
 ```
 local checkPlayerMang = exports["ph-playerMang"]:IsPlayerBannedFromServices(source)

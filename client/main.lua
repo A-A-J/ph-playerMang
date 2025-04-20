@@ -1,5 +1,6 @@
 ---@diagnostic disable: assign-type-mismatch, undefined-global
 local QBCore = exports['qb-core']:GetCoreObject()
+local targetSpawned = false
 
 -- Functions
 
@@ -40,6 +41,38 @@ function menu()
             }
         }
     })
+end
+
+local function targetSystem(status)
+    if not Config.youUserTargetOrEvent then return end
+    if not Config.pc then return end
+    for i, spwn in ipairs(Config.pc) do
+        if status and targetSpawned then
+            targetSpawned = true
+            exports['qb-target']:AddBoxZone(spwn.name, vector3(spwn.center.x,spwn.center.y,spwn.center.z), spwn.width, spwn.length, {
+                name = spwn.name,
+                heading = spwn.heading,
+                debugPoly = spwn.debugPoly,
+                minZ = spwn.minZ,
+                maxZ = spwn.maxZ,
+            }, {
+                options = {
+                    {
+                        type = "client",
+                        event = "ph-playerMang:client:openMenu",
+                        icon = "fas fa-eye",
+                        label = spwn.label,
+                        job = spwn.job
+                    },
+                },
+                distance = 2.5
+            })
+        else
+            if not spwn.name then return end
+            targetSpawned = false
+            exports['qb-target']:RemoveZone(spwn.name);
+        end
+    end
 end
 
 -- Event
@@ -235,6 +268,38 @@ RegisterNetEvent("ph-playerMang:client:trashServiceSuspension", function (data)
     end, data)
 end)
 
+-- Events Fivem
+
+AddEventHandler('onResourceStart', function(resourceName)
+    if resourceName == GetCurrentResourceName() then
+        Wait(100)
+        targetSystem(true)
+    end
+end)
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    Wait(100)
+    targetSystem(true)
+end)
+
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+    PlayerData = {}
+    targetSystem(false)
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    targetSystem(false)
+end)
+
+
+-- CreateThread
+CreateThread(function()
+    if Config.youUserTargetOrEvent then
+        targetSpawned = true
+        targetSystem(true)
+    end
+end)
 
 -- exports
 
