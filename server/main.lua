@@ -1,8 +1,6 @@
 ---@diagnostic disable: assign-type-mismatch, undefined-global
 local QBCore = exports['qb-core']:GetCoreObject()
 
-local usePkg = 'qb-input'
-
 -- Functions
 
 function addTimeToDate(timeBand)
@@ -23,38 +21,12 @@ function addTimeToDate(timeBand)
     return os.date("%Y-%m-%d", currentTime)
 end
 
---- CreateCallback
-
-QBCore.Functions.CreateCallback('ph-playerMang:server:CheckPermission', function(source, cb, job, grade)
-    print(QBCore.Functions.HasPermission(source, 'admin'), "QBCore.Functions.HasPermission(source, 'admin')")
-    local hasPermission = false
-    if QBCore.Functions.HasPermission(source, "admin") or IsPlayerAceAllowed(source, "command") then
-        hasPermission = true
-    end
-    cb(hasPermission)
-end)
-
--- QBCore.Functions.CreateCallback('ph-playerMang:server:getPlayers', function(source, cb, id)
---     local src = source
---     local Player = QBCore.Functions.GetPlayer(src)
---     if not Player then return cb(false) end
---     MySQL.query('SELECT p.citizenid, p.charinfo FROM players p LEFT JOIN player_services ps ON p.citizenid = ps.citizenid WHERE ps.citizenid IS NULL', {}, function(result)
---         if #result == 0 then return cb(false) end
---         for i, player in ipairs(result) do
---             player.charinfo = json.decode(player.charinfo)
---         end
---         cb(result)
---     end)
--- end)
+--- CreateCallbacks
 
 QBCore.Functions.CreateCallback('ph-playerMang:server:uploadPlayerOff', function(source, cb, input)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return cb(false) end
-
-    -- if usePkg == 'ox_lib' then
-    --     input.date = os.date('%Y-%m-%d', math.floor(input.date / 1000))
-    -- end
 
     local citizenid = input.cid
     local off_date = input.date
@@ -93,23 +65,6 @@ QBCore.Functions.CreateCallback('ph-playerMang:server:getPlayersOff', function(s
         cb(result)
     end)
 end)
-
--- QBCore.Functions.CreateCallback('ph-playerMang:server:editServiceSuspension', function(source, cb, data)
---     local src = source
---     local Player = QBCore.Functions.GetPlayer(src)
---     if not Player then return cb(false) end
---     MySQL.query('SELECT * FROM player_services WHERE citizenid = ?', {data[1].citizenid}, function(result)
---         if #result == 0 then return cb(false) end
---         for i, value in ipairs(result) do
---             local player = QBCore.Functions.GetPlayerByCitizenId(value.citizenid) or QBCore.Functions.GetOfflinePlayerByCitizenId(value.citizenid) or value.citizenid
---             if player.PlayerData then
---                 value.name = string.format("%s %s", player.PlayerData.charinfo.firstname,player.PlayerData.charinfo.lastname)
---             end
---             value.off_date = os.date("%d/%m/%Y", value.off_date/1000)
---         end
---         cb(result)
---     end)
--- end)
 
 QBCore.Functions.CreateCallback('ph-playerMang:server:editServiceSuspensionSave', function(source, cb, input)
     local src = source
@@ -207,7 +162,7 @@ CreateThread(function()
             if Player then
                 local citizenid = Player.PlayerData.citizenid
                 local bankBalance = Player.PlayerData.money.bank
-                -- [[local cashPlayer = Player.PlayerData.money.cash]]
+                -- [[local cashPlayer = Player.PlayerData.money.cash]] --- لتحقق من الكاش
                 local job = Player.PlayerData.job.name
                 local grade = Player.PlayerData.job.grade.level
                 local src = playerId

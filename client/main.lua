@@ -1,28 +1,7 @@
 ---@diagnostic disable: assign-type-mismatch, undefined-global
--- if not lib then return print("err ox_lib, line 1") end
 local QBCore = exports['qb-core']:GetCoreObject()
 
-
--- SlashCommand
-
-
-RegisterCommand('manageservices', function()
-    local playerData = QBCore.Functions.GetPlayerData()
-    if not playerData then return end
-    local job = playerData.job.name
-    local grade = playerData.job.grade.level
-    QBCore.Functions.TriggerCallback('ph-playerMang:server:CheckPermission', function(hasPermission)
-        if hasPermission then
-            menu()
-        else
-            QBCore.Functions.Notify("ليس لديك الصلاحيات لاستخدام هذا الأمر", "error")
-        end
-    end, job, grade)
-end)
-
-
 -- Functions
-
 
 local function AwaitCallback(name, ...)
     local promise = promise:new()
@@ -62,7 +41,6 @@ function menu()
         }
     })
 end
-
 
 -- Event
 
@@ -104,22 +82,6 @@ RegisterNetEvent("ph-playerMang:client:addPlayerOff", function()
         if success then return QBCore.Functions.Notify('تم إيقاف خدمات المواطن بنجاح!') end
         QBCore.Functions.Notify('النظام عطلان، عُد لاحقًا #2', 'error')
     end, dialog)
-
-    -- ox_lib
-    -- QBCore.Functions.TriggerCallback('ph-playerMang:server:getPlayers', function(getData)
-        -- if getData == false then return QBCore.Functions.Notify('لايوجد مواطنين لايقاف خدماتهم', 'error') end
-        -- local card = {}
-        -- for index, value in ipairs(getData) do
-        --     card[index] = {text = string.format('الاسم: %s %s - الهوية: %s', value.charinfo.firstname, value.charinfo.lastname, value.citizenid), value = value.citizenid}
-        -- end
-        -- local input = lib.inputDialog('ايقاف خدمات مواطن', {
-        --     {type = 'select',  label = 'الهوية', description = 'يجب ادخال هوية المواطن/العسكري', required = true, options = card},
-        --     {type = 'date', label = 'تاريخ رفع الايقاف عن الخدمة', icon = {'far', 'calendar'}, required = true, default = true, format = "DD/MM/YYYY"},
-        --     {type = 'textarea',  label = 'السبب', description = 'عقوبة من المحكمة/الاخلال بأمن المدينة للدرجة الاخيرة', required = true},
-        -- })
-        -- if not input then return end
-    -- end)
-
 end)
 
 RegisterNetEvent("ph-playerMang:client:getPlayerOff", function()
@@ -226,22 +188,6 @@ RegisterNetEvent("ph-playerMang:client:editServiceSuspension", function (data)
         if success then return QBCore.Functions.Notify('تم تعديل بيانات ايقاف خدمات المواطن') end
         QBCore.Functions.Notify('لم يتم العثور على المواطن في النظام', 'error')
     end, dialog)
-
-    -- -- ox_lib
-    -- QBCore.Functions.TriggerCallback('ph-playerMang:server:editServiceSuspension', function(getData)
-    --     if #getData < 1 then return QBCore.Functions.Notify('السستم عطلان #3') end
-    --     local getDataNow = getData[1]
-    --     local input = lib.inputDialog(string.format("تعديل ايقاف خدمات المواطن %s", getDataNow.name), {
-    --         {type = 'input', label = 'معرف المواطن', required = true, disabled = true, default = getDataNow.citizenid},
-    --         {type = 'date', label = 'تاريخ رفع الايقاف عن الخدمة', icon = {'far', 'calendar'}, required = true, format = "DD/MM/YYYY", default = getDataNow.off_date},
-    --         {type = 'textarea',  label = 'السبب', description = 'عقوبة من المحكمة/الاخلال بأمن المدينة للدرجة الاخيرة', required = true, default = getDataNow.reason},
-    --     })
-    --     if not input then return end
-    --     QBCore.Functions.TriggerCallback('ph-playerMang:server:editServiceSuspensionSave', function(success)
-    --         if success then return QBCore.Functions.Notify('تم تعديل بيانات ايقاف خدمات المواطن') end
-    --         QBCore.Functions.Notify('السستم عطلان، عُد لاحقًا #4', 'error')
-    --     end, input)
-    -- end, sendData)
 end)
 
 RegisterNetEvent("ph-playerMang:client:removeServiceSuspension", function (data)
@@ -277,22 +223,6 @@ RegisterNetEvent("ph-playerMang:client:removeServiceSuspension", function (data)
             }
         }
     })
-
-    -- local status = lib.alertDialog({
-    --     header = 'هل أنت متأكد من إزالة ايقاف الخدمات؟',
-    --     content = string.format("المواطن: %s   \n سبب الايقاف: %s", data[1].name, data[1].reason),
-    --     centered = true,
-    --     cancel = true
-    -- })
-
-    -- if status == 'confirm' then
-    --     QBCore.Functions.TriggerCallback('ph-playerMang:server:removeServiceSuspension', function(success)
-    --         if success then
-    --             return QBCore.Functions.Notify('تم إزالة ايقاف الخدمات بنجاح')
-    --         end
-    --         QBCore.Functions.Notify('السستم عطلان، عُد لاحقًا #4', 'error')
-    --     end, data)
-    -- end
 end)
 
 RegisterNetEvent("ph-playerMang:client:trashServiceSuspension", function (data)
