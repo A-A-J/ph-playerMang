@@ -1,4 +1,4 @@
-![Image](https://media.discordapp.net/attachments/1320802774950346762/1363598388192481370/image.png?ex=68069d76&is=68054bf6&hm=ef04ece59185e9a05fb59bc06cb0ab054d89c30c2415ef04ef9c7f8494fa52ca&=&format=webp&quality=lossless&width=1172&height=821)
+![Image](https://cdn.discordapp.com/attachments/1345919818435526780/1345919819005825136/image.png?ex=68438b82&is=68423a02&hm=a81ed75f5c59bce916d7b1fe0554ddbf63f3c0199f84230238636d5f7382d49b&)
 
 
 ## 📁 ph-playerMang
